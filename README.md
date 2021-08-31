@@ -1,18 +1,31 @@
 # Bitbucket OpenAPI Plugin
 
-PhishLabs runs BitBucket Data-Center. Bitbucket Server plugins work with Data-Center.
+A plugin for Bitbucket Data-Center or Server to render OpenAPI (aka Swagger) files from the Bitbucket file viewer of the portal. Files named as `[swagger | openapi].[yaml | json]` will be rendered in a Swagger-UI viewer instead of simply showing the YAML or JSON source.
 
-Requires Java11. This is a fact.
+# Prerequisites for Building and Deploying
+* Requires Java11. This is a fact.
+* Install the [Bitbucket SDK](https://developer.atlassian.com/server/framework/atlassian-sdk/install-the-atlassian-sdk-on-a-linux-or-mac-system/)
 
 ## Testing Locally
 ```shell
 cd openAPIViewer
 atlas-run
 ```
+
+## Debugging
+Run `atlas-run` from within the project directory. Then browse to http://localhost:7990. Login credentials are `admin:admin`.
+
+This plugin deploys as a browser-side script. Using the developer tools in your browser, search for `org.dsggregory.bitbucket.server.bitbucket-openapi-plugin` to set breakpoints.
+
 ### Utils
 * https://<your Bitbucket Server instance>/projects?web.panels
 * atlas-run
 * atlas-clean
+
+## Build and Deploy
+* atlas-build
+
+## Import Plugin to Bitbucket Server
 
 ## References:
 * https://developer.atlassian.com/server/bitbucket/how-tos/cluster-safe-plugins/

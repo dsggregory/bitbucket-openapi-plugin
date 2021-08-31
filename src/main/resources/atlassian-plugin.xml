@@ -1,0 +1,55 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="atlassian-data-center-compatible">true</param>
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <client-resource key="asciidoc-file-handler" name="Asciidoc Handler">
+        <resource type="download" name="asciidoc-handler.js" location="/static/asciidoc-handler/asciidoc-handler.js"/>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web-api:file-handlers</dependency>
+
+        <context>bitbucket.feature.files.fileHandlers</context>
+    </client-resource>
+
+    <client-resource key="asciidoc-view" name="Asciidoc View">
+        <directory location="/static/asciidoc-view" />
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>${project.groupId}.${project.artifactId}:asciidoc-renderer</dependency>
+    </client-resource>
+
+    <client-resource key="asciidoc-renderer" name="Asciidoc Renderer">
+        <resource type="download" name="asciidoc-renderer.js" location="/static/asciidoc-renderer/asciidoc-renderer.js"/>
+
+        <dependency>com.atlassian.bitbucket.server.bitbucket-web:global</dependency>
+        <dependency>${project.groupId}.${project.artifactId}:asciidoctor</dependency>
+        <dependency>${project.groupId}.${project.artifactId}:highlight</dependency>
+        <dependency>${project.groupId}.${project.artifactId}:mathjax</dependency>
+    </client-resource>
+
+    <client-resource key="swaggerui" name="Swagger-UI JS Library">
+        <resource type="download" name="asciidoctor-all.js" location="/static/lib/swagger/asciidoctor-all.js" />
+        <directory location="/static/lib/swagger" />
+    </client-resource>
+
+    <client-resource key="asciidoctor" name="Asciidoctor JS Library">
+        <resource type="download" name="asciidoctor-all.js" location="/static/lib/asciidoctor/asciidoctor-all.js" />
+        <directory location="/static/lib/asciidoctor" />
+    </client-resource>
+
+    <client-resource key="highlight" name="Highlight JS Library">
+        <resource type="download" name="highlight.js" location="/static/lib/highlight/highlight.js" />
+        <directory location="/static/lib/highlight" />
+    </client-resource>
+    
+    <client-resource key="mathjax" name="MathJax JS Library">
+        <resource type="download" name="mathjax-loader.js" location="/static/lib/mathjax/mathjax-loader.js" />
+        <directory location="/static/lib/mathjax" />
+    </client-resource>
+</atlassian-plugin>
