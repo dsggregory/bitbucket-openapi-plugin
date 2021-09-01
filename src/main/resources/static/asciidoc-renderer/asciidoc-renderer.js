@@ -1,11 +1,13 @@
 define('asciidoc/asciidoc-renderer', [
     'jquery',
     'underscore',
-    'lib/asciidoctor'
+    'lib/asciidoctor',
+    'lib/swagger'
 ], function(
     $,
     _,
-    Opal
+    Opal,
+    Swagger
 ) {
  function AsciiDocRenderer($container) {
         this.$container = $container;
@@ -30,117 +32,22 @@ define('asciidoc/asciidoc-renderer', [
         return $(window).height() * windowHeightRatio;
     };
 
-
     AsciiDocRenderer.prototype.render = function(asciiDocRawUrl, commitHash) {
-        var content;
-        $.ajax({
-            url : asciiDocRawUrl,
-            async:false,
-            success : function(data){
-                content = data;
-            },
-            error: function (xhr, status, errorMessage) {
-            }
+        var ui = Swagger.SwaggerUIBundle({
+            spec: content,
+            dom_id: '#swagger-ui',
+            deepLinking: true,
+            presets: [
+                SwaggerUIBundle.presets.apis,
+                SwaggerUIStandalonePreset
+            ],
+            plugins: [
+                SwaggerUIBundle.plugins.DownloadUrl
+            ],
+            layout: "StandaloneLayout"
         });
-
-        try {
-            var attributes =  Opal.hash({'source-highlighter': 'highlightjs', 'stylesheet': 'idea.css', 'linkcss!': '', 'copycss!': '', 'showtitle': '', 'stem!': '', 'env-bitbucket': '', 'env': 'bitbucket'});
-            var options = Opal.hash({'to_file': false, 'safe': 'secure', 'attributes': attributes});
-            var html = Opal.Asciidoctor.$convert(content, options);
-            this.$container.html(html);
-            postProcess(this.$container, options, asciiDocRawUrl, commitHash);
-        } catch (e) {
-            return;
-        }
+        this.$container.html(ui);
     };
-
-
-    function postProcess($content, options, asciiDocRawUrl, commitHash) {
-
-        var attributes = [];
-
-        if ((options['$key?']("attributes")) === true ) {
-            attributes = options['$[]']("attributes")
-        }
-
-        applyHighlighting($content, 'highlightjs', '');
-        handleImages($content, asciiDocRawUrl, commitHash);
-        handleLinks($content, asciiDocRawUrl, commitHash);
-    }
-
-    function applyHighlighting($content, highlighter, sourceLanguage) {
-        var AVAILABLE_HIGHLIGHTERS = {
-            'highlightjs': highlightUsingHighlightjs,
-            'highlight.js': highlightUsingHighlightjs
-        };
-
-        if (sourceLanguage) {
-            $('code.src', $content).each(function () {
-                $(this).data('lang', sourceLanguage).addClass('src-' + sourceLanguage).removeClass('src');
-            });
-        }
-
-        if (highlighter in AVAILABLE_HIGHLIGHTERS) {
-            AVAILABLE_HIGHLIGHTERS[highlighter]($content);
-        } else {
-            console.log('Unknown syntax highlighter "' + highlighter + '", using "' + DEFAULT_HIGHLIGHTER + '" instead.');
-            // not in IE8
-            if ('keys' in Object) {
-                console.log('Recognized highlighter names: ' + Object.keys(AVAILABLE_HIGHLIGHTERS));
-            }
-            AVAILABLE_HIGHLIGHTERS['highlightjs']($content);
-        }
-    }
-
-    function highlightUsingHighlightjs($content) {
-        $('code[class^="language-"],code[class^="src-"]', $content).each(function (i, e) {
-            e.className = e.className.replace('src-', 'language-');
-            hljs.highlightBlock(e);
-            var $e = $(e);
-            var $parent = $e.parent('pre.highlight');
-            var language = $e.data('lang');
-            if (!language) {
-                var matches = e.className.match(/language-([a-z]*)/);
-                if (matches.length === 2) {
-                    language = matches[1];
-                }
-            }
-            if ($parent.length === 0) {
-                $e.css('display', 'inline').addClass(language).css('padding', 0);
-            } else {
-                $parent.addClass(language);
-            }
-        });
-    }
-
-    /**
-     * Handle images and convert relative image locations to absolute URLs
-     */
-    function handleImages($content, asciiDocRawUrl, commitHash) {
-        $('img', $content).each(function () {
-            if(!this.getAttribute('src').startsWith('http'))
-                this.src = getBaseUrl(asciiDocRawUrl) + this.getAttribute('src') + '?at=' + commitHash + '&raw';
-        });
-    }
-
-    /**
-     * Handle links and convert relative locations to absolute URLs
-     */
-    function handleLinks($content, asciiDocRawUrl, commitHash) {
-        $('a', $content).each(function () {
-            if(!this.getAttribute('href').startsWith('http') && !this.getAttribute('href').startsWith('#') && $(this).parents('.toc').size() == 0)
-                this.href = getBaseUrl(asciiDocRawUrl) + this.getAttribute('href') + '?at=' + commitHash;
-        });
-    }
-
-    /**
-     * Return base Url of the AsciiDoc file
-     * @param AsciiDoc URL
-     * @returns {string} base Url of the AsciiDoc file
-     */
-    function getBaseUrl(asciiDocRawUrl) {
-        return asciiDocRawUrl.substring(0, asciiDocRawUrl.lastIndexOf('/')+1);
-    }
 
     AsciiDocRenderer.prototype.destroy = function() {
         $(window).off('resize', this._onWindowResize);

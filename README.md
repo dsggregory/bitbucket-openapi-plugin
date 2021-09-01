@@ -13,7 +13,7 @@ atlas-run
 ```
 
 ## Debugging
-Run `atlas-run` from within the project directory. Then browse to http://localhost:7990. Login credentials are `admin:admin`.
+Run `atlas-run` from within the project directory. Then browse to http://localhost:7990/bitbucket. Login credentials are `admin:admin`.
 
 This plugin deploys as a browser-side script. Using the developer tools in your browser, search for `org.dsggregory.bitbucket.server.bitbucket-openapi-plugin` to set breakpoints.
 
@@ -38,3 +38,4 @@ This plugin deploys as a browser-side script. Using the developer tools in your 
 * https://developer.atlassian.com/server/bitbucket/reference/plugin-module-types/plugin-modules/
 * https://developer.atlassian.com/server/bitbucket/reference/plugin-decorators/?utm_source=%2Fbitbucket%2Fserver%2Fdocs%2Flatest%2Freference%2Fplugin-decorators.html&utm_medium=301
 * https://docs.atlassian.com/bitbucket-server/docs/7.9.0/reference/javascript/feature_files_file-handlers.js.html
+* https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/

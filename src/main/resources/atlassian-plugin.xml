@@ -31,12 +31,17 @@
         <dependency>${project.groupId}.${project.artifactId}:asciidoctor</dependency>
         <dependency>${project.groupId}.${project.artifactId}:highlight</dependency>
         <dependency>${project.groupId}.${project.artifactId}:mathjax</dependency>
+        <dependency>${project.groupId}.${project.artifactId}:swagger</dependency>
     </client-resource>
 
-    <client-resource key="swaggerui" name="Swagger-UI JS Library">
+    <client-resource key="openapi-renderer" name="OpenAPI Renderer">
+        <resource type="download" name="openapi-renderer.js" location="/static/openapi-renderer/openapi-renderer.js"/>
+    </client-resource>
+
+    <!--<client-resource key="swaggerui" name="Swagger-UI JS Library">
         <resource type="download" name="asciidoctor-all.js" location="/static/lib/swagger/asciidoctor-all.js" />
         <directory location="/static/lib/swagger" />
-    </client-resource>
+    </client-resource>-->
 
     <client-resource key="asciidoctor" name="Asciidoctor JS Library">
         <resource type="download" name="asciidoctor-all.js" location="/static/lib/asciidoctor/asciidoctor-all.js" />
@@ -51,5 +56,10 @@
     <client-resource key="mathjax" name="MathJax JS Library">
         <resource type="download" name="mathjax-loader.js" location="/static/lib/mathjax/mathjax-loader.js" />
         <directory location="/static/lib/mathjax" />
+    </client-resource>
+
+    <client-resource key="swagger" name="SwaggerUI JS Library">
+        <resource type="download" name="swagger.js" location="/static/lib/swagger/swagger-wrapper.js" />
+        <directory location="/static/lib/swagger" />
     </client-resource>
 </atlassian-plugin>
